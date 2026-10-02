@@ -4,7 +4,7 @@ FROM python:3.11-slim
 ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PORT=8000
-RUN useradd -m -u 1000 app
+RUN useradd -m -u 1000 app && mkdir -p /srv && chown app:app /srv
 WORKDIR /srv
 
 COPY requirements.txt .

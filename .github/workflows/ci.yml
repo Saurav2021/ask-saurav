@@ -50,3 +50,27 @@ jobs:
         with:
           name: eval-results
           path: eval/results_*.md
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image (same Dockerfile Render uses)
+        run: docker build -t ask-saurav .
+      - name: Run and smoke-test under Render's 512 MB limit
+        run: |
+          docker run -d --name app -p 8000:8000 --memory=512m -e GROQ_API_KEY=dummy ask-saurav
+          for i in $(seq 1 30); do curl -fsS localhost:8000/health && break; sleep 2; done
+          curl -fsS localhost:8000/health
+          # exercises embedding + Chroma retrieval; the LLM call fails on the dummy key and must degrade to 503
+          code=$(curl -s -o /tmp/chat.json -w "%{http_code}" -X POST localhost:8000/chat -H 'content-type: application/json' -d '{"question":"What is AURA?"}')
+          echo "chat status: $code"; cat /tmp/chat.json; echo
+          test "$code" = "503" && grep -q "sauravsuz@gmail.com" /tmp/chat.json
+          mem=$(docker stats --no-stream --format '{{.MemUsage}}' app)
+          echo "::notice title=Container memory after a query::$mem"
+      - name: Container logs
+        if: always()
+        run: |
+          docker logs app 2>&1 | tail -40
+          docker logs app 2>&1 | grep -iE "error|exception" | head -5 | while read -r l; do echo "::warning title=container log::$l"; done
