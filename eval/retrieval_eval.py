@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import tempfile
 import time
@@ -77,6 +78,13 @@ def main() -> int:
 
     (HERE / "results_retrieval.md").write_text(md)
     print(md)
+    if os.environ.get("GITHUB_ACTIONS"):  # surface results as annotations in the Actions UI / API
+        k = s.top_k
+        print(f"::notice title=Retrieval eval::Hit@1={result['hit@1']:.3f} Hit@{k}={result[f'hit@{k}']:.3f} "
+              f"MRR={result['mrr']:.3f} over {result['n']} questions")
+        for q, src, rank, top in result["rows"]:
+            if rank != 1:
+                print(f"::warning title=Rank {rank or 'miss'}::{q} | expected {src} | top: {top}")
     ok = result[f"hit@{s.top_k}"] >= args.min_hit
     print("PASS" if ok else f"FAIL: Hit@{s.top_k} below {args.min_hit}")
     return 0 if ok else 1
