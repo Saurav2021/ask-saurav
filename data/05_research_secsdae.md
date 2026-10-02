@@ -1,7 +1,7 @@
 # Research: SecSDAE — Sequential Recommendation with Gated Fusion of Identity and Text
 
 ## SecSDAE overview
-SecSDAE is my first-author paper, co-authored with Dr. Govind Kumar Jha: "SecSDAE: A Semantic-Aware Contrastive Sequential Denoising Autoencoder for Cross-Modal Recommendation". It is currently under review at a Springer journal. It is the successor to my SCRBM work and moves from static to sequential recommendation, i.e. predicting a user's next interaction from their chronological history.
+SecSDAE is my first-author paper, co-authored with Dr. Govind Kumar Jha: "SecSDAE: A Semantic-Aware Contrastive Sequential Denoising Autoencoder for Cross-Modal Recommendation". It is currently under review at the Journal of Ambient Intelligence and Humanized Computing (Springer), the same journal reviewing my SCRBM paper. It is the successor to my SCRBM work and moves from static to sequential recommendation, i.e. predicting a user's next interaction from their chronological history.
 
 The problem: almost all sequential recommenders treat items as anonymous ID tokens and throw away the text that describes them. That breaks down for newly added items and for users with short histories.
 

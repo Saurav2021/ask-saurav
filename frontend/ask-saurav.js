@@ -44,7 +44,8 @@
   // ---------- styles ----------
   var CSS = `
   :host{all:initial;--bg:#080520;--bg2:#0C0730;--line:#25206A;--line2:#332E88;--tx:#F0EEFF;--mu:#A3A3D1;
-    --cy:#00F5C8;--vi:#9333EA;--pi:#FF2D9B;--or:#FF6B1A;
+    --cy:#00F5C8;--vi:#9333EA;--vi2:#7B2FBE;--pi:#FF2D9B;--or:#FF6B1A;--bl:#3B82F6;--on-cy:#04010F;
+    --glow:rgba(123,47,190,.35);--head:rgba(123,47,190,.16);--chip:rgba(17,10,58,.7);
     --fd:'Syne','DM Sans',system-ui,sans-serif;--fb:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
     font-family:var(--fb);color:var(--tx);position:fixed;z-index:9000;right:24px;bottom:24px}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -60,8 +61,8 @@
   @keyframes spin{to{transform:rotate(360deg)}}
 
   .launcher{display:flex;align-items:center;gap:12px;padding:7px 18px 7px 7px;border-radius:999px;
-    background:rgba(8,5,32,.92);border:1px solid var(--line2);backdrop-filter:blur(14px);
-    box-shadow:0 12px 40px rgba(123,47,190,.35);transition:transform .25s,border-color .25s}
+    background:color-mix(in srgb,var(--bg) 92%,transparent);border:1px solid var(--line2);backdrop-filter:blur(14px);
+    box-shadow:0 12px 40px var(--glow);transition:transform .25s,border-color .25s}
   .launcher:hover{transform:translateY(-3px);border-color:var(--cy)}
   .launcher .ring{width:44px;height:44px}.launcher .ring span{font-size:15px}
   .launcher b{font-family:var(--fd);font-weight:700;font-size:15px;display:block;line-height:1.15}
@@ -83,7 +84,7 @@
   @keyframes open{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:none}}
 
   header{display:flex;align-items:center;gap:12px;padding:16px 14px 14px 18px;border-bottom:1px solid var(--line);
-    background:linear-gradient(180deg,rgba(123,47,190,.16),transparent)}
+    background:linear-gradient(180deg,var(--head),transparent)}
   header .ring{width:42px;height:42px}header .ring span{font-size:14px}
   .who{flex:1;min-width:0}
   .who h2{font-family:var(--fd);font-size:17px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
@@ -98,7 +99,7 @@
     scrollbar-width:thin;scrollbar-color:var(--line2) transparent}
   .msg{font-size:14.5px;line-height:1.6;max-width:100%;overflow-wrap:anywhere}
   .me{align-self:flex-end;max-width:85%;padding:9px 14px;border-radius:16px 16px 4px 16px;
-    background:linear-gradient(135deg,var(--vi),#7B2FBE);color:#fff}
+    background:linear-gradient(135deg,var(--vi),var(--vi2));color:#fff}
   .ai{padding-left:14px;border-left:2px solid var(--cy)}
   .ai p+p,.ai p+ul,.ai ul+p{margin-top:8px}
   .ai ul{padding-left:18px}.ai li{margin:3px 0}.ai li::marker{color:var(--cy)}
@@ -113,7 +114,7 @@
   .note{font-size:12.5px;color:var(--mu);padding-left:16px}
 
   .chips{display:flex;flex-wrap:wrap;gap:7px;padding:2px 0 4px}
-  .chip{font-size:13px;padding:7px 12px;border-radius:999px;border:1px solid var(--line2);background:rgba(17,10,58,.7);
+  .chip{font-size:13px;padding:7px 12px;border-radius:999px;border:1px solid var(--line2);background:var(--chip);
     color:var(--tx);text-align:left;transition:border-color .2s,color .2s,background .2s}
   .chip:hover{border-color:var(--cy);color:var(--cy);background:rgba(0,245,200,.06)}
 
@@ -124,8 +125,8 @@
     max-height:120px;padding:7px 0}
   textarea:focus-visible{outline:0}
   textarea::placeholder{color:#6E6E9C}
-  .send{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;color:#04010F;
-    background:linear-gradient(135deg,var(--cy),#3B82F6);transition:opacity .2s,transform .2s}
+  .send{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;color:var(--on-cy);
+    background:linear-gradient(135deg,var(--cy),var(--bl));transition:opacity .2s,transform .2s}
   .send:disabled{opacity:.35;cursor:default}
   .send:not(:disabled):hover{transform:translateY(-1px)}
   .foot{padding:0 16px 12px;font-size:11.5px;color:#6E6E9C;text-align:center}

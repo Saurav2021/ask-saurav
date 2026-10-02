@@ -16,9 +16,6 @@ Nov – Dec 2025. A Random Forest + XGBoost ensemble that reaches 92% accuracy w
 ## REST API Data Pipeline — Enterprise Automation
 2026. An automated ETL pipeline that pulls data from REST APIs, validates it, and stores it in a relational database without duplicates using indexed, idempotent upserts and MD5-based deduplication. It also generates daily reports. Retry logic with exponential backoff, HTTP error classification and structured audit logging make failures easy to trace. Tech: Python, Requests, SQL, SQLite, logging. Repo: https://github.com/Saurav2021/REST-API-Data-Pipeline
 
-## Real-Time Gender Classification & Alert System
-A live CCTV-style video analytics system with automated safety alerts, under 100 ms alert latency, and a Flask MJPEG streaming dashboard. Tech: Python, OpenCV, Flask. Repo: https://github.com/Saurav2021/Real-Time-Gender-Classification-Alert-System
-
 ## Mobile Sales Analytics — Power BI Dashboard
 A star-schema data model with DAX KPI measures and 8 cross-filtered visuals, including geo maps, funnel charts and trend lines. Tech: Power BI, DAX, Power Query. Repo: https://github.com/Saurav2021/Mobile-Sales-Analytics-Power-BI-Dashboard
 
