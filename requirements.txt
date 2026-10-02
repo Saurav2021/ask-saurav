@@ -1,0 +1,13 @@
+# Install CPU-only PyTorch first to keep the image small:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30
+pydantic>=2.8,<3
+pydantic-settings>=2.4,<3
+langchain-core>=1.0,<2
+langchain-text-splitters>=1.0,<2
+langchain-groq>=1.0,<2
+langchain-chroma>=1.0,<2
+langchain-huggingface>=1.0,<2
+chromadb>=1.0,<2
+sentence-transformers>=3.0

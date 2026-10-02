@@ -1,0 +1,28 @@
+{"q": "Tell me about yourself", "source": "01_about.md", "keywords": ["GEC Munger", "AI"]}
+{"q": "Which college did you study at and what is your CGPA?", "source": "01_about.md", "keywords": ["8.79"]}
+{"q": "What is your department rank?", "source": "01_about.md", "keywords": ["1st"]}
+{"q": "How can I contact you?", "source": "01_about.md", "keywords": ["sauravsuz@gmail.com"]}
+{"q": "Are you willing to relocate to Noida?", "source": "08_faq.md", "keywords": ["relocat"]}
+{"q": "What certifications do you have?", "source": "01_about.md", "keywords": ["IBM"]}
+{"q": "What did you do at L&T Smart City?", "source": "02_experience.md", "keywords": ["200+", "35%"]}
+{"q": "How did you reduce CPU load on the CCTV system?", "source": "02_experience.md", "keywords": ["frame-sampling"]}
+{"q": "What was your role at Twinverse?", "source": "02_experience.md", "keywords": ["REST", "40%"]}
+{"q": "Tell me about your Salesforce internship", "source": "02_experience.md", "keywords": ["Apex", "Super Badges"]}
+{"q": "What is AURA?", "source": "03_research_aura.md", "keywords": ["four-stage", "stalking"]}
+{"q": "What accuracy does the violence recognition model achieve on RWF-2000?", "source": "03_research_aura.md", "keywords": ["87.0%"]}
+{"q": "How fast does the surveillance pipeline run?", "source": "03_research_aura.md", "keywords": ["30.5"]}
+{"q": "What are the ethical safeguards in your women safety system?", "source": "03_research_aura.md", "keywords": ["facial recognition"]}
+{"q": "Explain your SCRBM research", "source": "04_research_scrbm.md", "keywords": ["Restricted Boltzmann", "Sentence-BERT"]}
+{"q": "How much did SCRBM beat LightGCN by?", "source": "04_research_scrbm.md", "keywords": ["5.7%"]}
+{"q": "How does your recommender handle cold-start users?", "source": "04_research_scrbm.md", "keywords": ["87.1%"]}
+{"q": "What is SecSDAE?", "source": "05_research_secsdae.md", "keywords": ["sequential", "gate"]}
+{"q": "What did the gate learn for movies versus businesses?", "source": "05_research_secsdae.md", "keywords": ["69.6%"]}
+{"q": "How did you build this chatbot?", "source": "06_projects.md", "keywords": ["ChromaDB", "LangChain"]}
+{"q": "Tell me about the employee performance prediction project", "source": "06_projects.md", "keywords": ["92%", "SHAP"]}
+{"q": "Describe your REST API data pipeline project", "source": "06_projects.md", "keywords": ["idempotent"]}
+{"q": "Do you know LangChain and vector databases?", "source": "07_skills.md", "keywords": ["LangChain", "ChromaDB"]}
+{"q": "What is your experience with Transformers and tokenization?", "source": "07_skills.md", "keywords": ["BERT"]}
+{"q": "Which programming languages do you know?", "source": "07_skills.md", "keywords": ["Python", "SQL"]}
+{"q": "Why should we hire you for a Generative AI role?", "source": "08_faq.md", "keywords": ["RAG"]}
+{"q": "What are your salary expectations?", "source": "08_faq.md", "keywords": ["sauravsuz@gmail.com"]}
+{"q": "Have you done Kaggle or hackathons?", "source": "08_faq.md", "keywords": ["Kaggle"]}

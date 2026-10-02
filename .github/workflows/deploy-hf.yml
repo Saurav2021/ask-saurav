@@ -1,0 +1,50 @@
+name: Deploy to Hugging Face Spaces
+
+# Needs two repo settings (Settings -> Secrets and variables -> Actions):
+#   secret   HF_TOKEN       a Hugging Face token with "write" access
+#   variable HF_SPACE       e.g. Saurav2021/ask-saurav
+# Optional secrets forwarded to the Space: GROQ_API_KEY, ADMIN_TOKEN
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md", "notebooks/**", "docs/**"]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-hf
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ vars.HF_SPACE != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install "huggingface_hub>=0.25"
+      - name: Upload to Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+        run: |
+          cp deploy/space_README.md README.md   # Spaces read their config from README front matter
+          python - <<'PY'
+          import os
+          from huggingface_hub import HfApi
+          api, space = HfApi(token=os.environ["HF_TOKEN"]), os.environ["HF_SPACE"]
+          api.create_repo(space, repo_type="space", space_sdk="docker", exist_ok=True)
+          for name in ("GROQ_API_KEY", "ADMIN_TOKEN"):
+              if os.environ.get(name):
+                  api.add_space_secret(space, name, os.environ[name])
+          api.upload_folder(
+              repo_id=space, repo_type="space", folder_path=".",
+              ignore_patterns=[".git/*", ".github/*", "notebooks/*", "tests/*", "eval/*", "docs/*", "deploy/*", "storage/*"],
+              commit_message=f"Deploy {os.environ.get('GITHUB_SHA', '')[:7]}",
+          )
+          print(f"Deployed: https://huggingface.co/spaces/{space}")
+          PY

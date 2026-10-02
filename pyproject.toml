@@ -1,0 +1,22 @@
+[project]
+name = "ask-saurav"
+version = "1.0.0"
+description = "RAG chatbot that answers questions about Saurav Kumar in his own voice"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["B008"]  # FastAPI's Depends()/Header() in defaults is the intended idiom
+
+[tool.ruff.lint.isort]
+known-first-party = ["app", "eval", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]

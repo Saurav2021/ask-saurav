@@ -1,0 +1,10 @@
+.git
+.github
+.env
+storage/
+**/__pycache__
+.pytest_cache
+.ruff_cache
+notebooks/.ipynb_checkpoints
+venv
+.venv

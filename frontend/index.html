@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ask Saurav</title>
+<meta name="description" content="Chat with an AI version of Saurav Kumar, built with RAG on his resume, research papers and projects."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root{--bg:#04010F;--tx:#F0EEFF;--mu:#A3A3D1;--cy:#00F5C8;--vi:#9333EA;--line:#25206A}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;background:var(--bg);color:var(--tx);font-family:'DM Sans',system-ui,sans-serif;
+    background-image:radial-gradient(ellipse 700px 500px at 0% 100%,rgba(123,47,190,.18),transparent 60%),
+                     radial-gradient(ellipse 500px 400px at 100% 0%,rgba(0,245,200,.07),transparent 60%)}
+  main{max-width:620px;padding:12vh 28px 160px 8vw}
+  h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.6rem,7vw,4.4rem);letter-spacing:-.045em;line-height:.95;margin-bottom:22px}
+  p{color:var(--mu);font-size:1.05rem;line-height:1.7;max-width:52ch;margin-bottom:16px}
+  p strong{color:var(--tx);font-weight:500}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+  a,button{font:inherit;font-size:.95rem;padding:12px 20px;border-radius:12px;text-decoration:none;cursor:pointer}
+  .primary{border:0;color:#04010F;font-weight:500;background:linear-gradient(135deg,var(--cy),#3B82F6)}
+  .ghost{color:var(--tx);border:1px solid var(--line)}
+  .ghost:hover{border-color:var(--cy)}
+  :focus-visible{outline:2px solid var(--cy);outline-offset:3px}
+  .stack{margin-top:48px;font-size:.88rem;color:#7C7CAA;line-height:1.7}
+</style>
+</head>
+<body>
+<main>
+  <h1>Ask Saurav</h1>
+  <p>I'm Saurav Kumar, an AI engineer and first author on three research papers. This is an AI version of me, built with <strong>retrieval-augmented generation</strong> over my resume, papers and projects. It answers in my voice and shows where each answer came from.</p>
+  <p>Ask about my research on explainable surveillance and recommender systems, my internships at L&amp;T Smart City and Twinverse, or how this chatbot works.</p>
+  <div class="actions">
+    <button class="primary" data-ask-saurav>Start chatting</button>
+    <a class="ghost" href="https://saurav2021.github.io/Portfolio/">View my portfolio</a>
+    <a class="ghost" href="https://github.com/Saurav2021/ask-saurav">Source code</a>
+  </div>
+  <p class="stack">LangChain, ChromaDB, all-MiniLM-L6-v2 embeddings, GPT-OSS-120B on Groq, FastAPI with streaming, SQLite analytics. API docs at <a href="docs" style="padding:0;color:var(--cy)">/docs</a>.</p>
+</main>
+<script src="static/ask-saurav.js" data-teaser="false" defer></script>
+<script>window.addEventListener("load",function(){setTimeout(function(){window.AskSaurav&&window.AskSaurav.open()},400)})</script>
+</body>
+</html>
