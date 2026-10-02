@@ -21,7 +21,8 @@ class Settings(BaseSettings):
     max_answer_tokens: int = 700
 
     # --- Embeddings + vector store ---
-    embed_model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    embed_model: str = "sentence-transformers/all-MiniLM-L6-v2"   # ONNX build, served by fastembed
+    model_cache_dir: Path = ROOT / "storage" / "models"
     data_dir: Path = ROOT / "data"
     chroma_dir: Path = ROOT / "storage" / "chroma"
     collection: str = "saurav_kb"

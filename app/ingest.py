@@ -53,14 +53,34 @@ def load_documents(settings: Settings) -> list[Document]:
     return chunks
 
 
-def get_embeddings(settings: Settings) -> Embeddings:
-    from langchain_huggingface import HuggingFaceEmbeddings
+class FastEmbedEmbeddings(Embeddings):
+    """all-MiniLM-L6-v2 exported to ONNX and run with onnxruntime via fastembed.
 
-    return HuggingFaceEmbeddings(
-        model_name=settings.embed_model,
-        model_kwargs={"device": "cpu"},
-        encode_kwargs={"normalize_embeddings": True},  # cosine similarity == dot product
-    )
+    Same weights as the sentence-transformers model, but no PyTorch: the whole service fits in a
+    512 MB free-tier container and query embedding stays fast on a fraction of a CPU."""
+
+    def __init__(self, model_name: str, cache_dir: str | None = None, threads: int | None = 1) -> None:
+        from fastembed import TextEmbedding
+
+        self._model = TextEmbedding(model_name=model_name, cache_dir=cache_dir, threads=threads)
+
+    @staticmethod
+    def _unit(vectors) -> list[list[float]]:
+        import numpy as np
+
+        arr = np.asarray(list(vectors), dtype="float32")
+        arr /= np.clip(np.linalg.norm(arr, axis=1, keepdims=True), 1e-12, None)  # cosine == dot product
+        return arr.tolist()
+
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        return self._unit(self._model.embed(texts, batch_size=32))
+
+    def embed_query(self, text: str) -> list[float]:
+        return self._unit(self._model.embed([text]))[0]
+
+
+def get_embeddings(settings: Settings) -> Embeddings:
+    return FastEmbedEmbeddings(settings.embed_model, cache_dir=str(settings.model_cache_dir))
 
 
 def build_index(settings: Settings, embeddings: Embeddings):

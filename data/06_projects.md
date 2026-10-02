@@ -2,12 +2,12 @@
 
 ## Ask Saurav — this RAG chatbot
 The assistant you're talking to is itself one of my Generative AI projects. It is a retrieval-augmented generation (RAG) chatbot that answers questions about me in my own voice.
-- **Pipeline:** my resume, papers and project notes are written as Markdown, split by heading and then into overlapping chunks with LangChain text splitters, embedded with the Hugging Face sentence-transformers model all-MiniLM-L6-v2 (the same SBERT family I used in SCRBM and SecSDAE), and stored in a persistent ChromaDB vector database.
+- **Pipeline:** my resume, papers and project notes are written as Markdown, split by heading and then into overlapping chunks with LangChain text splitters, embedded with the sentence-transformers model all-MiniLM-L6-v2 (run as ONNX through fastembed) (the same SBERT family I used in SCRBM and SecSDAE), and stored in a persistent ChromaDB vector database.
 - **Retrieval and generation:** for each question, a LangChain chain rewrites follow-up questions into standalone ones using chat history, retrieves the most relevant chunks with maximal marginal relevance (MMR), and sends them to an open-weight LLM served by Groq (GPT-OSS-120B), which streams the answer token by token.
 - **Grounding:** the system prompt only allows answers from retrieved context, and every answer shows its sources.
 - **Backend:** FastAPI with Server-Sent Events streaming, per-IP rate limiting and CORS restricted to my portfolio. Every interaction (question, latency, sources) is logged to SQLite, and an analytics endpoint runs SQL aggregations over those logs.
 - **Quality:** a pytest suite, a retrieval evaluation set measuring hit-rate@k and MRR, a notebook explaining tokenization, embeddings, chunk-size choice and ChromaDB vs FAISS, and GitHub Actions CI.
-- **Hosting:** completely free. The backend runs as a Docker container on Hugging Face Spaces, deployed automatically from GitHub, and the chat widget is embedded in my GitHub Pages portfolio.
+- **Hosting:** completely free. The backend is a Docker container on Render's free tier, redeployed automatically on every push to GitHub, and the chat widget is embedded in my GitHub Pages portfolio. To fit the 512 MB free container I run the embedding model in ONNX via fastembed instead of PyTorch.
 - Repo: https://github.com/Saurav2021/ask-saurav
 
 ## ML Employee Performance Prediction — REST API

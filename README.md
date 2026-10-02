@@ -1,19 +1,19 @@
 # Ask Saurav: a RAG chatbot that answers as me
 
 [![CI](https://github.com/Saurav2021/ask-saurav/actions/workflows/ci.yml/badge.svg)](https://github.com/Saurav2021/ask-saurav/actions/workflows/ci.yml)
-[![Live demo](https://img.shields.io/badge/demo-Hugging%20Face%20Spaces-yellow)](https://huggingface.co/spaces/SauravvKumar/ask-saurav)
+[![Live demo](https://img.shields.io/badge/demo-live%20on%20Render-46E3B7)](https://ask-saurav.onrender.com)
 [![Portfolio](https://img.shields.io/badge/embedded%20in-portfolio-7B2FBE)](https://saurav2021.github.io/Portfolio/)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 **Ask Saurav** is a retrieval-augmented generation (RAG) chatbot that lets recruiters and professors talk to an AI version of me. It answers in the first person ("I built AURA…"), using only facts retrieved from my resume, research papers and project notes, and it shows the source of every answer.
 
-**Try it:** open my [portfolio](https://saurav2021.github.io/Portfolio/) and click **Ask Saurav** (bottom right), or use the [standalone demo](https://sauravvkumar-ask-saurav.hf.space).
+**Try it:** open my [portfolio](https://saurav2021.github.io/Portfolio/) and click **Ask Saurav** (bottom right), or use the [standalone demo](https://ask-saurav.onrender.com).
 
 <!-- After deploying, record a short GIF of the widget and save it as docs/demo.gif -->
 <!-- ![demo](docs/demo.gif) -->
 
-The whole stack runs on free tiers: Groq's free API, Hugging Face Spaces' free CPU and GitHub Pages.
+The whole stack runs on free tiers: Groq's free API, Render's free web service and GitHub Pages.
 
 ---
 
@@ -27,8 +27,8 @@ The whole stack runs on free tiers: Groq's free API, Hugging Face Spaces' free C
 | **Vector databases** | Persistent **ChromaDB** in production, benchmarked against **FAISS** in the notebook |
 | **SQL** | Every interaction is logged to **SQLite**; `/analytics` runs SQL aggregations with `json_each`, plus a p95 latency query ([`app/db.py`](app/db.py)) |
 | **LLM application engineering** | Grounding prompt, persona, prompt-injection and privacy guardrails, graceful failure handling |
-| **APIs and deployment** | FastAPI with Server-Sent Events streaming, rate limiting, CORS, Docker, Hugging Face Spaces |
-| **Git, GitHub and testing** | pytest suite (offline, with a fake LLM), ruff, GitHub Actions CI, automatic deploy, PR template |
+| **APIs and deployment** | FastAPI with Server-Sent Events streaming, rate limiting, CORS, Docker, Render, ONNX Runtime |
+| **Git, GitHub and testing** | pytest suite (offline, with a fake LLM), ruff, GitHub Actions CI, Render auto-deploy, PR template |
 | **Evaluation** | Retrieval Hit@k and MRR gate in CI, plus an answer eval for keyword recall, first-person voice and guardrails |
 
 ---
@@ -39,11 +39,11 @@ The whole stack runs on free tiers: Groq's free API, Hugging Face Spaces' free C
 flowchart LR
     subgraph Offline["Build time (Docker image)"]
         MD["data/*.md<br/>resume · papers · projects"] --> SPLIT["Markdown header splitter<br/>+ recursive chunker (700 chars)"]
-        SPLIT --> EMB1["all-MiniLM-L6-v2<br/>384-d embeddings"]
+        SPLIT --> EMB1["all-MiniLM-L6-v2 (ONNX)<br/>384-d embeddings"]
         EMB1 --> DB[("ChromaDB<br/>cosine HNSW")]
     end
 
-    subgraph Online["Per question (FastAPI on HF Spaces)"]
+    subgraph Online["Per question (FastAPI on Render)"]
         U["Widget on<br/>GitHub Pages"] -- "POST /chat/stream" --> RW{"history?"}
         RW -- yes --> CQ["GPT-OSS-20B<br/>rewrite follow-up"]
         RW -- no --> RET
@@ -98,7 +98,6 @@ Run on every push by GitHub Actions (results appear in the job summary and as an
 ```bash
 git clone https://github.com/Saurav2021/ask-saurav.git && cd ask-saurav
 python -m venv .venv && source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install torch --index-url https://download.pytorch.org/whl/cpu
 pip install -r requirements-dev.txt
 cp .env.example .env                                     # add your free Groq key
 python -m app.ingest                                     # builds storage/chroma
@@ -112,18 +111,17 @@ Interactive API docs are at `http://localhost:8000/docs`.
 ## Deploy for free (about 10 minutes)
 
 1. **Groq key:** sign up at [console.groq.com](https://console.groq.com/keys) (no card needed) and create an API key.
-2. **Hugging Face:** create an account, then go to *Settings → Access Tokens* and create a token with **write** access.
-3. **GitHub repo settings** (*Settings → Secrets and variables → Actions*):
-   - Secrets: `HF_TOKEN`, `GROQ_API_KEY`, and optionally `ADMIN_TOKEN` (any long random string).
-   - Variables: `HF_SPACE` = `SauravvKumar/ask-saurav` (optional, this is the default).
-4. **Push to `main`.** The *Deploy to Hugging Face Spaces* workflow creates the Space, sets the secrets and uploads the code. The Space builds the Docker image (about 5 minutes the first time).
-5. **Embed the widget** in any site:
+2. **Render:** sign up at [render.com](https://render.com) with GitHub (no card needed). Click **New → Blueprint**, pick this repo, and paste your Groq key when asked for `GROQ_API_KEY`. Render reads [`render.yaml`](render.yaml), builds the Docker image (about 5 minutes the first time) and redeploys on every push to `main`.
+3. **Embed the widget** in any site, using your Render URL:
    ```html
-   <script src="ask-saurav.js" data-api="https://<hf-username>-ask-saurav.hf.space" defer></script>
+   <script src="ask-saurav.js" data-api="https://ask-saurav.onrender.com" defer></script>
    ```
    Any element with `data-ask-saurav` opens the chat; `data-ask-saurav="What is AURA?"` also asks that question.
+4. **Optional, keep it warm:** add the repo variable `BACKEND_URL` (your Render URL) and the *Keep chatbot warm* workflow pings `/health` every 10 minutes during the day.
 
-> Free Spaces sleep after 48 hours without traffic. The widget pings `/health` as soon as the page loads and shows a "waking up" note, so the first visitor isn't left staring at a blank chat. The SQLite log lives in the container, so it resets when the Space restarts.
+> Render's free tier sleeps after 15 idle minutes and takes about a minute to wake. The widget pings `/health` as soon as the page loads and shows a "waking up" note, so the first visitor isn't left staring at a blank chat. The SQLite log lives in the container, so it resets on each deploy or restart.
+>
+> **Why fastembed?** The free container has 512 MB of RAM. PyTorch alone would use most of it, so the same all-MiniLM-L6-v2 weights run as ONNX through fastembed, which keeps the whole service small and quick on a tenth of a CPU.
 
 ---
 
@@ -156,8 +154,8 @@ ask-saurav/
 ├── eval/              # retrieval + answer evaluation sets and scripts
 ├── notebooks/         # tokenization, embeddings, chunk-size sweep, Chroma vs FAISS
 ├── tests/             # offline pytest suite (fake embeddings + fake LLM)
-├── deploy/            # Hugging Face Space config
-├── .github/workflows/ # CI + auto-deploy
+├── .github/workflows/ # CI + keep-warm ping
+├── render.yaml        # one-click free deploy on Render
 └── Dockerfile
 ```
 

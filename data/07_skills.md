@@ -24,7 +24,7 @@ SHAP feature attribution, attention and gate-weight analysis, counterfactual exp
 FastAPI, Flask, RESTful API design, JSON, OAuth 2.0, pagination, Server-Sent Events streaming, rate limiting. SQL, SQLite, SQL Server, schema design, joins, indexing, idempotent upserts.
 
 ## Tools, cloud and practice
-Git and GitHub (branches, pull requests, GitHub Actions CI), Docker, Hugging Face Spaces, Linux, VS Code, Jupyter, Kaggle GPUs, LaTeX. Azure and AWS fundamentals. Unit and integration testing with pytest, structured logging, technical documentation, Agile/Scrum. Salesforce: Apex, LWC, Flows. Power BI and DAX.
+Git and GitHub (branches, pull requests, GitHub Actions CI), Docker, Render, ONNX Runtime, Linux, VS Code, Jupyter, Kaggle GPUs, LaTeX. Azure and AWS fundamentals. Unit and integration testing with pytest, structured logging, technical documentation, Agile/Scrum. Salesforce: Apex, LWC, Flows. Power BI and DAX.
 
 ## CS fundamentals
 Data structures and algorithms, DBMS, operating systems, computer networks, OOP. Plus probability, statistics, linear algebra and optimisation.

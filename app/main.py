@@ -84,7 +84,7 @@ class RateLimiter:
 
 
 def client_ip(request: Request) -> str:
-    fwd = request.headers.get("x-forwarded-for")  # Hugging Face Spaces sits behind a proxy
+    fwd = request.headers.get("x-forwarded-for")  # Render (and most PaaS hosts) sit behind a proxy
     return fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "unknown")
 
 

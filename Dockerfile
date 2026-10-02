@@ -1,26 +1,22 @@
-# Hugging Face Spaces (Docker SDK) image. Free CPU tier: 2 vCPU, 16 GB RAM.
+# Runs on Render's free web service (512 MB RAM) or any Docker host.
 FROM python:3.11-slim
 
-# Spaces run containers as uid 1000
-RUN useradd -m -u 1000 user
-ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH \
-    HF_HOME=/home/user/.cache/huggingface \
-    PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
-RUN mkdir -p /home/user/app && chown user:user /home/user/app
-WORKDIR /home/user/app
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PORT=8000
+RUN useradd -m -u 1000 app
+WORKDIR /srv
 
 COPY requirements.txt .
-RUN pip install torch --index-url https://download.pytorch.org/whl/cpu \
- && pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
-COPY --chown=user . .
-USER user
+COPY --chown=app . .
+USER app
 
-# Download the embedding model and build the Chroma index at build time,
+# Download the ONNX embedding model and build the Chroma index at build time,
 # so a cold start only has to load files from disk.
 RUN python -m app.ingest
 
-EXPOSE 7860
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7860", "--proxy-headers", "--forwarded-allow-ips", "*"]
+EXPOSE 8000
+# Render injects $PORT; a single worker keeps memory well under 512 MB.
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --workers 1 --proxy-headers --forwarded-allow-ips '*'"]

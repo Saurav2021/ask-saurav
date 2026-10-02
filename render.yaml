@@ -1,0 +1,15 @@
+# Render Blueprint: dashboard → New → Blueprint → pick this repo. Free plan, no card needed.
+services:
+  - type: web
+    name: ask-saurav
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: main
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false        # Render asks you for this value once, in the dashboard
+      - key: ADMIN_TOKEN
+        generateValue: true
