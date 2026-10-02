@@ -2,7 +2,7 @@ name: Deploy to Hugging Face Spaces
 
 # Needs two repo settings (Settings -> Secrets and variables -> Actions):
 #   secret   HF_TOKEN       a Hugging Face token with "write" access
-#   variable HF_SPACE       e.g. Saurav2021/ask-saurav
+#   variable HF_SPACE       optional, defaults to SauravvKumar/ask-saurav
 # Optional secrets forwarded to the Space: GROQ_API_KEY, ADMIN_TOKEN
 
 on:
@@ -18,7 +18,6 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ vars.HF_SPACE != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -28,14 +27,16 @@ jobs:
       - name: Upload to Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          HF_SPACE: ${{ vars.HF_SPACE }}
+          HF_SPACE: ${{ vars.HF_SPACE || secrets.HF_SPACE || 'SauravvKumar/ask-saurav' }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
         run: |
           cp deploy/space_README.md README.md   # Spaces read their config from README front matter
           python - <<'PY'
-          import os
+          import os, sys
           from huggingface_hub import HfApi
+          if not os.environ.get("HF_TOKEN"):
+              sys.exit("HF_TOKEN secret is missing: add it under Settings > Secrets and variables > Actions")
           api, space = HfApi(token=os.environ["HF_TOKEN"]), os.environ["HF_SPACE"]
           api.create_repo(space, repo_type="space", space_sdk="docker", exist_ok=True)
           for name in ("GROQ_API_KEY", "ADMIN_TOKEN"):

@@ -1,14 +1,14 @@
 # Ask Saurav: a RAG chatbot that answers as me
 
 [![CI](https://github.com/Saurav2021/ask-saurav/actions/workflows/ci.yml/badge.svg)](https://github.com/Saurav2021/ask-saurav/actions/workflows/ci.yml)
-[![Live demo](https://img.shields.io/badge/demo-Hugging%20Face%20Spaces-yellow)](https://huggingface.co/spaces/Saurav2021/ask-saurav)
+[![Live demo](https://img.shields.io/badge/demo-Hugging%20Face%20Spaces-yellow)](https://huggingface.co/spaces/SauravvKumar/ask-saurav)
 [![Portfolio](https://img.shields.io/badge/embedded%20in-portfolio-7B2FBE)](https://saurav2021.github.io/Portfolio/)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 **Ask Saurav** is a retrieval-augmented generation (RAG) chatbot that lets recruiters and professors talk to an AI version of me. It answers in the first person ("I built AURA…"), using only facts retrieved from my resume, research papers and project notes, and it shows the source of every answer.
 
-**Try it:** open my [portfolio](https://saurav2021.github.io/Portfolio/) and click **Ask Saurav** (bottom right), or use the [standalone demo](https://saurav2021-ask-saurav.hf.space).
+**Try it:** open my [portfolio](https://saurav2021.github.io/Portfolio/) and click **Ask Saurav** (bottom right), or use the [standalone demo](https://sauravvkumar-ask-saurav.hf.space).
 
 <!-- After deploying, record a short GIF of the widget and save it as docs/demo.gif -->
 <!-- ![demo](docs/demo.gif) -->
@@ -115,7 +115,7 @@ Interactive API docs are at `http://localhost:8000/docs`.
 2. **Hugging Face:** create an account, then go to *Settings → Access Tokens* and create a token with **write** access.
 3. **GitHub repo settings** (*Settings → Secrets and variables → Actions*):
    - Secrets: `HF_TOKEN`, `GROQ_API_KEY`, and optionally `ADMIN_TOKEN` (any long random string).
-   - Variables: `HF_SPACE` = `<your-hf-username>/ask-saurav`.
+   - Variables: `HF_SPACE` = `SauravvKumar/ask-saurav` (optional, this is the default).
 4. **Push to `main`.** The *Deploy to Hugging Face Spaces* workflow creates the Space, sets the secrets and uploads the code. The Space builds the Docker image (about 5 minutes the first time).
 5. **Embed the widget** in any site:
    ```html
