@@ -39,6 +39,7 @@ jobs:
       - name: Retrieval eval (real MiniLM embeddings, fails below Hit@4 = 0.85)
         run: python -m eval.retrieval_eval --min-hit 0.85
       - name: Answer eval (runs only if GROQ_API_KEY secret is set)
+        continue-on-error: true   # depends on an external free API; reported, not blocking
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python -m eval.answer_eval

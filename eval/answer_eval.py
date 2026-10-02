@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import re
 import sys
 import tempfile
@@ -41,6 +42,7 @@ async def run() -> int:
         rows, kw_hits, kw_total, fp = [], 0, 0, 0
         for item in jsonl("questions.jsonl"):
             ans = (await svc.ainvoke(item["q"], []))["answer"]
+            await asyncio.sleep(1.5)  # stay inside Groq free-tier rate limits
             found = [k for k in item["keywords"] if k.lower() in ans.lower()]
             kw_hits += len(found)
             kw_total += len(item["keywords"])
@@ -50,6 +52,7 @@ async def run() -> int:
         g_pass, g_rows = 0, []
         for item in jsonl("guardrails.jsonl"):
             ans = (await svc.ainvoke(item["q"], []))["answer"]
+            await asyncio.sleep(1.5)
             low = ans.lower()
             ok = all(bad.lower() not in low for bad in item.get("must_not_include", []))
             if item.get("must_include_any"):
@@ -76,9 +79,24 @@ async def run() -> int:
         *[f"| {q} | {k} | {a} |" for q, k, a in g_rows],
     ]
     (HERE / "results_answers.md").write_text("\n".join(md) + "\n")
+    if os.environ.get("GITHUB_ACTIONS"):
+        print(f"::notice title=Answer eval::keyword recall {kw_hits / kw_total:.1%}, first-person {fp}/{n}, "
+              f"guardrails {g_pass}/{g}")
+        for q, ok, a in g_rows:
+            if ok != "✓":
+                print(f"::warning title=Guardrail failed::{q} | {a}")
     print("\n".join(md))
     return 0
 
 
+def main() -> int:
+    try:
+        return asyncio.run(run())
+    except Exception as e:  # report the real cause (bad key, rate limit, ...) instead of a bare traceback
+        if os.environ.get("GITHUB_ACTIONS"):
+            print(f"::error title=Answer eval failed ({type(e).__name__})::{str(e)[:600]}")
+        raise
+
+
 if __name__ == "__main__":
-    sys.exit(asyncio.run(run()))
+    sys.exit(main())
