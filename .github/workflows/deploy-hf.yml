@@ -33,19 +33,32 @@ jobs:
         run: |
           cp deploy/space_README.md README.md   # Spaces read their config from README front matter
           python - <<'PY'
-          import os, sys
-          from huggingface_hub import HfApi
-          if not os.environ.get("HF_TOKEN"):
-              sys.exit("HF_TOKEN secret is missing: add it under Settings > Secrets and variables > Actions")
-          api, space = HfApi(token=os.environ["HF_TOKEN"]), os.environ["HF_SPACE"]
-          api.create_repo(space, repo_type="space", space_sdk="docker", exist_ok=True)
-          for name in ("GROQ_API_KEY", "ADMIN_TOKEN"):
-              if os.environ.get(name):
-                  api.add_space_secret(space, name, os.environ[name])
-          api.upload_folder(
-              repo_id=space, repo_type="space", folder_path=".",
-              ignore_patterns=[".git/*", ".github/*", "notebooks/*", "tests/*", "eval/*", "docs/*", "deploy/*", "storage/*"],
-              commit_message=f"Deploy {os.environ.get('GITHUB_SHA', '')[:7]}",
-          )
-          print(f"Deployed: https://huggingface.co/spaces/{space}")
+          import os, sys, traceback
+          def fail(title, msg):
+              print(f"::error title={title}::{msg}".replace("\n", " | ")); sys.exit(1)
+          try:
+              from huggingface_hub import HfApi
+              token, space = os.environ.get("HF_TOKEN", ""), os.environ["HF_SPACE"]
+              if not token:
+                  fail("HF_TOKEN missing", "Add HF_TOKEN under Settings > Secrets and variables > Actions > Secrets")
+              api = HfApi(token=token)
+              who = api.whoami()
+              print(f"::notice title=Hugging Face login::{who.get('name')} (token role: {who.get('auth', {}).get('accessToken', {}).get('role')})")
+              api.create_repo(space, repo_type="space", space_sdk="docker", exist_ok=True)
+              for name in ("GROQ_API_KEY", "ADMIN_TOKEN"):
+                  if os.environ.get(name):
+                      api.add_space_secret(space, name, os.environ[name])
+                  elif name == "GROQ_API_KEY":
+                      print("::warning title=GROQ_API_KEY missing::Chat will fail until GROQ_API_KEY is set")
+              api.upload_folder(
+                  repo_id=space, repo_type="space", folder_path=".",
+                  ignore_patterns=[".git/*", ".github/*", "notebooks/*", "tests/*", "eval/*", "docs/*", "deploy/*", "storage/*"],
+                  commit_message=f"Deploy {os.environ.get('GITHUB_SHA', '')[:7]}",
+              )
+              print(f"::notice title=Deployed::https://huggingface.co/spaces/{space}")
+          except SystemExit:
+              raise
+          except Exception as e:
+              traceback.print_exc()
+              fail(type(e).__name__, str(e)[:900])
           PY
