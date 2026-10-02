@@ -28,9 +28,9 @@ class Settings(BaseSettings):
     collection: str = "saurav_kb"
     chunk_size: int = 700
     chunk_overlap: int = 120
-    top_k: int = 4
-    fetch_k: int = 12
-    mmr_lambda: float = 0.6
+    top_k: int = 5
+    fetch_k: int = 15
+    mmr_lambda: float = 0.8   # 1.0 = pure relevance, 0.0 = pure diversity
 
     # --- API ---
     db_path: Path = ROOT / "storage" / "chat_logs.sqlite3"

@@ -1,6 +1,8 @@
 # Research: AURA — Explainable Women-Safety Surveillance
 
 ## AURA overview
+In one line: AURA is an explainable four-stage AI video pipeline (YOLOv11 detection → tracking with an interpretable stalking score → R(2+1)D-18 violence recognition → XGBoost risk fusion with SHAP explanations) for women's safety surveillance, where every alert shows the evidence behind it.
+
 AURA is my first-author research on an explainable four-stage video pipeline for women's safety surveillance. The manuscript is titled "An Interpretable Stalking Score for Women's Safety Surveillance within an Explainable Four-Stage Video Pipeline". It is currently under submission at a Springer journal (International Journal of System Assurance Engineering and Management). I keep the GitHub repository README-only while the paper is under review, to respect journal confidentiality.
 
 The core idea: one person persistently following another is the behaviour that most often comes before harassment in public spaces, yet I could not find any system in the literature that measures it. So I defined an interpretable stalking score for a pair of tracked pedestrians, built from five components an operator can read separately: spatial proximity, duration of co-occurrence, agreement of heading, correlation of walking speed, and threat evidence carried forward from the detector. I deliberately kept it decomposed instead of collapsing it into one opaque probability, because an operator needs to know why a pair was flagged before acting.

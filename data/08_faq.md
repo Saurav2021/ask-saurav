@@ -1,5 +1,8 @@
 # Frequently Asked Questions
 
+## Tell me about yourself (elevator pitch)
+I'm Saurav Kumar, an AI engineer who just completed a B.Tech in Computer Science (AI) at GEC Munger, ranked 1st in my department with a CGPA of 8.79. In production, I worked on a live 200+ camera CCTV system at L&T Smart City, where my adaptive frame-sampling fix cut CPU load by 35% with zero dropped feeds, and at Twinverse I built the REST API layer between Python ML services and a React app (40% faster responses) plus a BERT keyword extractor (28% more accurate). In research, I'm first author on three papers: AURA, an explainable four-stage video pipeline for women's safety (YOLOv11, tracking, R(2+1)D-18, SHAP); SCRBM, a Sentence-BERT-conditioned RBM recommender that beats LightGCN; and SecSDAE, a sequential recommender with gated identity-text fusion. I also built this RAG chatbot with LangChain, ChromaDB and Groq. I'm looking for Generative AI and AI/ML engineering roles and can relocate anywhere in India.
+
 ## Why should we hire you for a Generative AI role?
 I combine three things a fresher GenAI engineer needs. First, real NLP and embeddings depth: I have used Sentence-BERT embeddings, contrastive learning and Transformer blocks in two first-author research papers, and shipped a BERT-based feature in a production API. Second, I build working systems end to end: this RAG chatbot uses LangChain, ChromaDB, a Groq-hosted LLM, FastAPI, SQLite and CI, and it is deployed for free. Third, production discipline: I supported a live 200+ camera system under SLAs at L&T Smart City and cut its CPU load by 35%. I also measure things honestly; my papers report failures as openly as wins.
 
